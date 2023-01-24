@@ -1,0 +1,144 @@
+﻿@page "/"
+@using uoloading_files_to_blazor.Data;
+@using UploadFilesLib;
+@inject IConfiguration _config
+@inject ISqlDataAccess _db
+
+<PageTitle>Upload Demo App</PageTitle>
+
+<h1>Upload Demo</h1>
+
+<EditForm Model="newCustomer"  OnValidSubmit="HandleSumbit">
+    <div>
+        <label for="firstName">First Name:</label>
+        <InputText 
+            id="firstName" 
+            class="form-control" 
+            @bind-Value="newCustomer.FirstName" 
+        />
+    </div>
+
+    <div>
+        <label for="lastName">Last Name:</label>
+        <InputText 
+            id="lastName"
+            class="form-control"
+            @bind-Value="newCustomer.LastName" 
+        />
+    </div>
+
+    <div>
+        <label for="profilePic">Profile Picture:</label>
+        <InputFile
+            OnChange="@LoadFiles"
+            class="form-control"
+            accept=".png,.jpg,.jpeg,.gif"
+        />
+    </div>
+
+    <button 
+        class="btn btn-primary mt-3"
+        type="submit"
+    >
+        Create Customer
+    </button>
+</EditForm>
+
+@*<InputFile 
+    multiple
+    OnChange="@CaptureFile"
+    accept=".png,.jpg,.jpeg"
+/>*@
+
+@if(errors.Count > 0)
+{
+    <h2>Error</h2>
+    <ul class="text-danger">
+        @foreach(var  err in errors)
+        {
+            <li>@err</li>
+        }
+    </ul>
+}
+
+@code {
+    private long maxFileSize = 3 * 1024 * 1024; //3MB
+
+    //private int maxAllowedFiles = 3;
+
+    private List<string> errors = new();
+
+    private CustomerModel newCustomer = new();
+
+    private IBrowserFile? file;
+
+    private async Task HandleSumbit()
+    {
+        try
+        {
+            string relativePath = await CaptureFile();
+
+            newCustomer.FileName = relativePath;
+
+            await _db.SaveData("dbo.spCustomer_Insert", "Default", newCustomer);
+
+            newCustomer = new();
+            file = null;
+            errors.Clear();
+        }
+        catch(Exception ex)
+        {
+            errors.Add($"Error --> {ex.Message}");
+        }
+    }
+
+    private void LoadFiles(InputFileChangeEventArgs e)
+    {
+        file = e.File;
+    } 
+
+    private async Task<string> CaptureFile()
+    {
+        if (file is null)
+            return "";
+
+        //errors.Clear();
+
+        //if (e.FileCount > maxAllowedFiles)
+        //{
+        //    errors.Add($"Error --> Attempting to upload {e.FileCount} files, but only {maxAllowedFiles} FileServerExtensions are allowed ");
+        //    return;
+        //}
+
+        try
+        {
+            string newFileName = Path.ChangeExtension(
+                Path.GetRandomFileName(),
+                Path.GetExtension(file.Name)
+            );
+
+            string path = Path.Combine(
+                _config.GetValue<string>("FileStorage")!,
+                "myfiles",
+                newFileName
+            );
+
+            string relativePath = Path.Combine("myfiles", newFileName);
+
+            Directory.CreateDirectory(Path.Combine(
+                _config.GetValue<string>("FileStorage")!,
+                "myfiles"));
+
+            await using FileStream fs = new FileStream(path, FileMode.Create);
+
+            await file.OpenReadStream(maxFileSize).CopyToAsync(fs);
+
+            return relativePath;
+        }
+        catch (Exception ex)
+        {
+            errors.Add($"File --> {file.Name} Error --> {ex.Message}");
+            throw;
+        }
+    }
+}

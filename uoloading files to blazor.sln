@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uoloading files to blazor", "uoloading files to blazor\uoloading files to blazor.csproj", "{BB226C1B-0E7E-42E3-9C4B-1178C96FCDA7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UploadFilesLib", "UploadFilesLib\UploadFilesLib.csproj", "{97C65055-7F5D-4CE4-ABFC-864254451256}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BB226C1B-0E7E-42E3-9C4B-1178C96FCDA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB226C1B-0E7E-42E3-9C4B-1178C96FCDA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB226C1B-0E7E-42E3-9C4B-1178C96FCDA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB226C1B-0E7E-42E3-9C4B-1178C96FCDA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97C65055-7F5D-4CE4-ABFC-864254451256}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97C65055-7F5D-4CE4-ABFC-864254451256}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97C65055-7F5D-4CE4-ABFC-864254451256}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97C65055-7F5D-4CE4-ABFC-864254451256}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {83123D79-BC74-4D91-8410-1FA3EB16F608}
+	EndGlobalSection
+EndGlobal
